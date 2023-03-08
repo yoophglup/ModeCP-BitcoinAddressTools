@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Security;
 
 public class HashUtils {
-    public static String hash160(String hexString) throws NoSuchAlgorithmException {
+    public static String RipeMd160(String hexString) throws NoSuchAlgorithmException {
         byte[] sha256Bytes = BaseEncoding.base16().decode(hexString.toUpperCase());
         Security.addProvider(new BouncyCastleProvider());
         MessageDigest md = MessageDigest.getInstance("RIPEMD160");

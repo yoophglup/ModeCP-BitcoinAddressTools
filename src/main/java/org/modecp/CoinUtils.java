@@ -32,6 +32,9 @@ public class CoinUtils {
         String pad="0".repeat(64);
         return "02" + pad.substring(point[0].toString(16).length())+point[0].toString(16);
     }
+    public static String PrivateKeyToHexPrivateKey(BigInteger privateKey){
+        return privateKey.toString(16);
+    }
     public static String PointtoUncompressedPubkey(BigInteger[] point) {
         return Pubkey4(point).toUpperCase();
     }
@@ -68,7 +71,7 @@ public class CoinUtils {
         BigInteger[] publickey= ECC.EccMultiply(GPoint,privateKey,GPoint);
         String hexPublicKey=CoinUtils.Pubkey4(publickey);
         String hexKeyHashed=HashUtils.Sha256(hexPublicKey);
-        String ripemd160hexKeyHashed=HashUtils.hash160(hexKeyHashed);
+        String ripemd160hexKeyHashed=HashUtils.RipeMd160(hexKeyHashed);
         String netCodeKey="00"+ripemd160hexKeyHashed;
         String hash1forchecksum=HashUtils.Sha256(netCodeKey);
         String hash2forchecksum=HashUtils.Sha256(hash1forchecksum);
@@ -87,7 +90,7 @@ public class CoinUtils {
             hexPublicKey = CoinUtils.Pubkey3(publickey);
         }
         String hexKeyHashed=HashUtils.Sha256(hexPublicKey);
-        String ripemd160hexKeyHashed=HashUtils.hash160(hexKeyHashed);
+        String ripemd160hexKeyHashed=HashUtils.RipeMd160(hexKeyHashed);
         String netCodeKey="00"+ripemd160hexKeyHashed;
         String hash1forchecksum=HashUtils.Sha256(netCodeKey);
         String hash2forchecksum=HashUtils.Sha256(hash1forchecksum);
@@ -100,7 +103,7 @@ public class CoinUtils {
         BigInteger[] publickey= point;
         String hexPublicKey=CoinUtils.Pubkey4(publickey);
         String hexKeyHashed=HashUtils.Sha256(hexPublicKey);
-        String ripemd160hexKeyHashed=HashUtils.hash160(hexKeyHashed);
+        String ripemd160hexKeyHashed=HashUtils.RipeMd160(hexKeyHashed);
         String netCodeKey="00"+ripemd160hexKeyHashed;
         String hash1forchecksum=HashUtils.Sha256(netCodeKey);
         String hash2forchecksum=HashUtils.Sha256(hash1forchecksum);
@@ -118,7 +121,7 @@ public class CoinUtils {
             hexPublicKey = CoinUtils.Pubkey3(publickey);
         }
         String hexKeyHashed=HashUtils.Sha256(hexPublicKey);
-        String ripemd160hexKeyHashed=HashUtils.hash160(hexKeyHashed);
+        String ripemd160hexKeyHashed=HashUtils.RipeMd160(hexKeyHashed);
         String netCodeKey="00"+ripemd160hexKeyHashed;
         String hash1forchecksum=HashUtils.Sha256(netCodeKey);
         String hash2forchecksum=HashUtils.Sha256(hash1forchecksum);

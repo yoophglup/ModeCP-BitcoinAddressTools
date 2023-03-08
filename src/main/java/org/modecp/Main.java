@@ -48,33 +48,72 @@ public class Main {
         System.out.print(",");
         System.out.println(ECC.ECCdiv(eightkey,BigInteger.TWO,eightkey)[1]);*/
 
-        List<BigInteger[]> example=ECC.EccList(ECC.GPoint,BigInteger.TEN,ECC.GPoint);
-        example.forEach(x-> System.out.println(x[0]+" "+x[2]));
+        List<BigInteger[]> example = ECC.EccList(ECC.GPoint, BigInteger.TEN, ECC.GPoint);
+        example.forEach(x -> System.out.println(x[0] + " " + x[2]));
         System.out.println(" ---");
-        List<BigInteger[]> example2=ECC.EccDivList(ECC.G("1000"),new BigInteger("1000"),ECC.GPoint);
-        example2.forEach(x-> System.out.println(x[0]+" "+x[2]));
+        List<BigInteger[]> example2 = ECC.EccDivList(ECC.G("1000"), new BigInteger("1000"), ECC.GPoint);
+        example2.forEach(x -> System.out.println(x[0] + " " + x[2]));
         System.out.println("");
 
 
         //Keytable needs to store a <Integer,Coin> where Coin is a class object of the public key including private key
-        HashMap<Integer,BigInteger[]> keyTable= new HashMap<>();
-        keyTable.put(5506,new BigInteger[] {ECC.GPoint[0],ECC.GPoint[1],new BigInteger("1")});
-        keyTable.put(8956,new BigInteger[] {ECC.G("2")[0],ECC.G("2")[1],new BigInteger("2")});
+        HashMap<Integer, BigInteger[]> keyTable = new HashMap<>();
+        keyTable.put(5506, new BigInteger[]{ECC.GPoint[0], ECC.GPoint[1], new BigInteger("1")});
+        keyTable.put(8956, new BigInteger[]{ECC.G("2")[0], ECC.G("2")[1], new BigInteger("2")});
 
-        KeyTable.saveStatus(keyTable,"KeyTable.dat");
-        HashMap<Integer,BigInteger[]> keyTableL= new HashMap<>();
-        keyTableL=KeyTable.loadStatus("KeyTable.dat");
+        KeyTable.saveStatus(keyTable, "KeyTable.dat");
+        HashMap<Integer, BigInteger[]> keyTableL = new HashMap<>();
+        keyTableL = KeyTable.loadStatus("KeyTable.dat");
 
         //simple isinKeytable
 
-        if (keyTable.get(5506)[0]==ECC.G("1")[0]){
+        if (keyTable.get(5506)[0] == ECC.G("1")[0]) {
             System.out.println(keyTable.get(5506)[2]);
-        }else{
+        } else {
             System.out.println(Boolean.FALSE);
         }
 
+        System.out.println(CoinUtils.MakeCoinfromPrivateKeyUncompressed(BigInteger.TEN));
+        System.out.println(CoinUtils.MakeCoinfromPrivateKeyUncompressed(ECC.N.divide(BigInteger.TWO)));
+        System.out.println(CoinUtils.MakeCoinfromPrivateKeyUncompressed(ECC.N.divide(BigInteger.TEN)));
+        System.out.println(CoinUtils.PrivateKeyToHexPrivateKey(ECC.N.divide(BigInteger.TEN)));
+
+
+        String name = "YooPhGluP";
+        StringBuilder test = new StringBuilder("iiii");
+        Boolean found=Boolean.TRUE;
+        BigInteger iterate=CoinUtils.RadomBigInt();
+        BigInteger[] pubkey= ECC.G(iterate.toString());
+        while (found==Boolean.TRUE) {
+            iterate=iterate.add(BigInteger.ONE);
+            pubkey=ECC.ECCadd(pubkey,ECC.GPoint);
+            String coin=CoinUtils.MakeCoinfromPointUncompressed(pubkey);
+            //System.out.print(".");
+            if (coin.toString().toUpperCase().contains(name.toUpperCase())){
+                //found=Boolean.FALSE;
+                System.out.println("Key: "+iterate);
+                System.out.println(coin);
+            }
+            String coin2=CoinUtils.MakeCoinfromPointCompressed(pubkey);
+            //System.out.print(".");
+            if (coin2.toString().toUpperCase().contains(name.toUpperCase())){
+                //found=Boolean.FALSE;
+                System.out.println("Key: "+iterate);
+                System.out.println(coin2);
+            }
+            BigInteger[] ipubkey={pubkey[0],ECC.N.subtract(pubkey[1])};
+            String coin3=CoinUtils.MakeCoinfromPointCompressed(ipubkey);
+            //System.out.print(".");
+            if (coin3.toString().toUpperCase().contains(name.toUpperCase())){
+                //found=Boolean.FALSE;
+                System.out.println("Key: "+iterate);
+                System.out.println(coin3);
+            }
+
+        }
 
     }
+
 
 
 }

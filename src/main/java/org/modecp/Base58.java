@@ -5,17 +5,7 @@ package org.modecp;
 import java.util.Arrays;
 public class Base58 {
     public static final char[] ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".toCharArray();
-    private static final char ENCODED_ZERO ;
-    private static final int[] INDEXES;
 
-    static {
-        ENCODED_ZERO = ALPHABET[0];
-        INDEXES = new int[128];
-        Arrays.fill(INDEXES, -1);
-
-        for (int i = 0; i < ALPHABET.length; INDEXES[ALPHABET[i]] = i++) {
-        }
-    }
     public static String encode(byte[] input) {
         if (input.length == 0) {
             return "";
@@ -36,9 +26,6 @@ public class Base58 {
                 }
             }
 
-            while(outputStart < encoded.length && encoded[outputStart] == ENCODED_ZERO) {
-                ++outputStart;
-            }
             return new String(encoded, outputStart, encoded.length - outputStart);
 
         }
@@ -52,7 +39,6 @@ public class Base58 {
             number[i] = (byte)(temp / divisor);
             remainder = temp % divisor;
         }
-
         return (byte)remainder;
     }
 
