@@ -82,7 +82,7 @@ public class Main {
         String name = "YooPhGluP";
         StringBuilder test = new StringBuilder("iiii");
         Boolean found=Boolean.TRUE;
-        BigInteger iterate=CoinUtils.RadomBigInt();
+        BigInteger iterate=CoinUtils.RandomBigInt();
         BigInteger[] pubkey= ECC.G(iterate.toString());
         while (found==Boolean.TRUE) {
             iterate=iterate.add(BigInteger.ONE);

@@ -1,12 +1,7 @@
 package org.modecp;
-
-import com.google.common.hash.Hashing;
-
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
-
 public class CoinUtils {
     public static String Pubkey4(BigInteger[] point) {
         String pointx, pointy;
@@ -63,8 +58,7 @@ public class CoinUtils {
                 trueY = possibleY[1];
             }
         }
-        String UnCompressedPubKEy = PointtoUncompressedPubkey(new BigInteger[]{keyValue, trueY});
-        return UnCompressedPubKEy;
+        return PointtoUncompressedPubkey(new BigInteger[]{keyValue, trueY});
     }
     public static String MakeCoinfromPrivateKeyUncompressed(BigInteger privateKey) throws NoSuchAlgorithmException {
         BigInteger[] GPoint = ECC.GPoint;
@@ -77,8 +71,7 @@ public class CoinUtils {
         String hash2forchecksum=HashUtils.Sha256(hash1forchecksum);
         String checksum= hash2forchecksum.substring(0,8);
         String addchecksum=netCodeKey+checksum;
-        String BTCAddress=HashUtils.toBase58(addchecksum);
-        return BTCAddress;
+        return HashUtils.toBase58(addchecksum);
     }
     public static String MakeCoinfromPrivateKeyCompressed(BigInteger privateKey) throws NoSuchAlgorithmException {
         BigInteger[] GPoint = ECC.GPoint;
@@ -96,11 +89,9 @@ public class CoinUtils {
         String hash2forchecksum=HashUtils.Sha256(hash1forchecksum);
         String checksum= hash2forchecksum.substring(0,8);
         String addchecksum=netCodeKey+checksum;
-        String BTCAddress=HashUtils.toBase58(addchecksum);
-        return BTCAddress;
+        return HashUtils.toBase58(addchecksum);
     }
-    public static String MakeCoinfromPointUncompressed(BigInteger[] point) throws NoSuchAlgorithmException {
-        BigInteger[] publickey= point;
+    public static String MakeCoinfromPointUncompressed(BigInteger[] publickey) throws NoSuchAlgorithmException {
         String hexPublicKey=CoinUtils.Pubkey4(publickey);
         String hexKeyHashed=HashUtils.Sha256(hexPublicKey);
         String ripemd160hexKeyHashed=HashUtils.RipeMd160(hexKeyHashed);
@@ -109,11 +100,9 @@ public class CoinUtils {
         String hash2forchecksum=HashUtils.Sha256(hash1forchecksum);
         String checksum= hash2forchecksum.substring(0,8);
         String addchecksum=netCodeKey+checksum;
-        String BTCAddress=HashUtils.toBase58(addchecksum);
-        return BTCAddress;
+        return HashUtils.toBase58(addchecksum);
     }
-    public static String MakeCoinfromPointCompressed(BigInteger[] point) throws NoSuchAlgorithmException {
-        BigInteger[] publickey= point;
+    public static String MakeCoinfromPointCompressed(BigInteger[] publickey) throws NoSuchAlgorithmException {
         String hexPublicKey;
         if (publickey[1].mod(BigInteger.TWO).equals(BigInteger.ZERO)) {
             hexPublicKey = CoinUtils.Pubkey2(publickey);
@@ -127,8 +116,7 @@ public class CoinUtils {
         String hash2forchecksum=HashUtils.Sha256(hash1forchecksum);
         String checksum= hash2forchecksum.substring(0,8);
         String addchecksum=netCodeKey+checksum;
-        String BTCAddress=HashUtils.toBase58(addchecksum);
-        return BTCAddress;
+        return HashUtils.toBase58(addchecksum);
     }
     public static BigInteger[] MakePointFromHexKey(String hexKey){
         String parity = hexKey.substring(0, 2);
@@ -165,11 +153,10 @@ public class CoinUtils {
     }
     public static String MakeCoinFromHexKey(String hexKey) throws NoSuchAlgorithmException {
         String parity = hexKey.substring(0, 2);
+        BigInteger[] point = MakePointFromHexKey(hexKey);
         if (parity.equals("04")) {
-            BigInteger[] point = MakePointFromHexKey(hexKey);
             return MakeCoinfromPointUncompressed(point);
         }else {
-            BigInteger[] point = MakePointFromHexKey(hexKey);
             return MakeCoinfromPointCompressed(point);
         }
     }
@@ -179,7 +166,7 @@ public class CoinUtils {
 
 
 
-    public static BigInteger RadomBigInt(){
+    public static BigInteger RandomBigInt(){
         BigInteger maxLimit = ECC.N;
         BigInteger minLimit = BigInteger.ONE;
         BigInteger bigInteger = maxLimit.subtract(minLimit);
